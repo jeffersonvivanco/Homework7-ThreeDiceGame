@@ -1,0 +1,52 @@
+body{
+    text-align: center;
+}
+
+.hide{
+    display: none;
+}
+
+.diceInGame {
+    vertical-align: top; 
+    border: solid black;
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    padding: .5em;
+    margin: 1em;
+}
+
+.hidden > button{
+    padding: 1em;
+    font-size: 1em;
+}
+.rollButton:hover {
+    background-color: green;
+    opacity: .4;
+}
+
+.highlightDie:hover {
+    background-color: green;
+    opacity: .4;
+}
+.clickedDie {
+    background-color: gray;
+    opacity: .4;
+}
+.pinnedDie {
+    background-color: darkslategray;
+    color: white; 
+}
+.lose{
+    background-color: lightcoral; 
+    display: inline-block; 
+    color: black;
+    border: solid red;
+
+}
+.win{
+    display: inline-block; 
+    background-color:lightgreen; 
+    border: solid green; 
+    
+}
