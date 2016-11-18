@@ -50,3 +50,16 @@ body{
     border: solid green; 
     
 }
+.overlay{
+    z-index: 100;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    background-color: aliceblue;
+    transition: 0.5s; 
+    top: 0px; 
+ 
+
+
+}

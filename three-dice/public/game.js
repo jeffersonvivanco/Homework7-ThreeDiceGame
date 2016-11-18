@@ -15,6 +15,8 @@ var rollFunction = function (numOfDie) {
 };
 
 //Below: calculates user input and returns object with lowest elements chosen
+var userPickedNums = []; 
+var isUserPicked = false; 
 var calculateUserInput = function (userInput) {
 
     var chooseSmallest = function (a, b) {
@@ -22,7 +24,73 @@ var calculateUserInput = function (userInput) {
     };
     var dice = userInput.split(',');
     var fiveDie, fourDie, threeDie, twoDie, oneDie;
-    if(dice.length === 15){
+    if(dice.length === 5){
+        fiveDie = parseInt(dice.slice(0,5).reduce(chooseSmallest)); 
+
+        fourDie = parseInt(rollFunction(4).reduce(chooseSmallest)); 
+        threeDie = parseInt(rollFunction(3).reduce(chooseSmallest)); 
+        twoDie = parseInt(rollFunction(2).reduce(chooseSmallest)); 
+        oneDie = parseInt(rollFunction(1).reduce(chooseSmallest));
+        return {
+            fiveDie : fiveDie,
+            fourDie : fourDie,
+            threeDie : threeDie,
+            twoDie: twoDie,
+            oneDie: oneDie,
+            total : 0
+        }                 
+    }
+    else if(dice.length === 9){
+        fiveDie = parseInt(dice.slice(0,5).reduce(chooseSmallest));
+        fourDie = parseInt(dice.slice(5,9).reduce(chooseSmallest)); 
+
+        threeDie = parseInt(rollFunction(3).reduce(chooseSmallest)); 
+        twoDie = parseInt(rollFunction(2).reduce(chooseSmallest)); 
+        oneDie = parseInt(rollFunction(1).reduce(chooseSmallest));
+        return {
+            fiveDie : fiveDie,
+            fourDie : fourDie,
+            threeDie : threeDie,
+            twoDie: twoDie,
+            oneDie: oneDie,
+            total : 0
+        }                 
+    }
+    else if(dice.length === 12){
+        fiveDie = parseInt(dice.slice(0,5).reduce(chooseSmallest));
+        fourDie = parseInt(dice.slice(5,9).reduce(chooseSmallest));
+        threeDie = parseInt(dice.slice(9,12).reduce(chooseSmallest));  
+
+        twoDie = parseInt(rollFunction(2).reduce(chooseSmallest)); 
+        oneDie = parseInt(rollFunction(1).reduce(chooseSmallest));
+
+        return {
+            fiveDie : fiveDie,
+            fourDie : fourDie,
+            threeDie : threeDie,
+            twoDie: twoDie,
+            oneDie: oneDie,
+            total : 0
+        }        
+              
+    }
+    else if(dice.length === 14){
+        fiveDie = parseInt(dice.slice(0,5).reduce(chooseSmallest));
+        fourDie = parseInt(dice.slice(5,9).reduce(chooseSmallest));
+        threeDie = parseInt(dice.slice(9,12).reduce(chooseSmallest));
+        twoDie = parseInt(dice.slice(12,14).reduce(chooseSmallest)); 
+
+        oneDie = parseInt(rollFunction(1).reduce(chooseSmallest));
+        return {
+            fiveDie : fiveDie,
+            fourDie : fourDie,
+            threeDie : threeDie,
+            twoDie: twoDie,
+            oneDie: oneDie,
+            total : 0
+        }                  
+    }
+    else if(dice.length === 15){
         fiveDie = parseInt(dice.slice(0,5).reduce(chooseSmallest));
         fourDie = parseInt(dice.slice(5,9).reduce(chooseSmallest));
         threeDie = parseInt(dice.slice(9,12).reduce(chooseSmallest));
@@ -35,14 +103,33 @@ var calculateUserInput = function (userInput) {
             twoDie: twoDie,
             oneDie: oneDie,
             total : 0
-        }
+        }        
+    }
+    else if (dice.length === 20) {
+        fiveDie = parseInt(dice.slice(0,5).reduce(chooseSmallest));
+        fourDie = parseInt(dice.slice(5,9).reduce(chooseSmallest));
+        threeDie = parseInt(dice.slice(9,12).reduce(chooseSmallest));
+        twoDie = parseInt(dice.slice(12,14).reduce(chooseSmallest));
+        oneDie = parseInt(dice.slice(14,15).reduce(chooseSmallest));
+        
+        userPickedNums = dice.slice(15,20); 
+        isUserPicked = true; 
+
+        return {
+            fiveDie : fiveDie,
+            fourDie : fourDie,
+            threeDie : threeDie,
+            twoDie: twoDie,
+            oneDie: oneDie,
+            total : 0
+        } 
     }
     else{
         fiveDie = parseInt(rollFunction(5).reduce(chooseSmallest)); 
         fourDie = parseInt(rollFunction(4).reduce(chooseSmallest)); 
         threeDie = parseInt(rollFunction(3).reduce(chooseSmallest)); 
         twoDie = parseInt(rollFunction(2).reduce(chooseSmallest)); 
-        oneDie = parseInt(rollFunction(1).reduce(chooseSmallest)); 
+        oneDie = parseInt(rollFunction(1).reduce(chooseSmallest));
         return {
             fiveDie : fiveDie,
             fourDie : fourDie,
@@ -69,6 +156,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
     var contentEle = document.getElementById('content');
     var gameEle = document.getElementById('game');
     var errMessEle = document.getElementById('error-message');
+    var gotItBtn = errMessEle.firstElementChild.firstElementChild.nextElementSibling;
+    gotItBtn.setAttribute('id','gotItBtn'); 
     var introEle = document.getElementById('intro');
     var inputEle  = document.getElementById('diceValues');
     var goBtn = document.getElementsByTagName('button')[0];
@@ -144,65 +233,97 @@ document.addEventListener('DOMContentLoaded', function (event) {
             this.classList.toggle('clickedDie'); 
             var numClicked = document.querySelectorAll('.clickedDie'); 
             if(numClicked.length > 0){
-                pinButton.disabled = false; 
+//                 pinButton.disabled = false; 
             }
             else{
-                pinButton.disabled = true; 
+//                 pinButton.disabled = true; 
             }
+    }
+    var gotItBtnFunc = function(){
+        errMessEle.classList.toggle('hide'); 
+        this.removeEventListener('click',gotItBtnFunc);
+    }
+    var blankDieFunc = function(){
+        var errorEle = errMessEle.firstElementChild.firstElementChild; 
+        errorEle.textContent = 'You can\'t click on a blank die.'; 
+        errMessEle.classList.toggle('hide');
+        gotItBtn.addEventListener('click', gotItBtnFunc);        
     }
     pinButton.addEventListener('click', function(){
         var dice2  = document.querySelectorAll('.clickedDie'); 
-        for(var i=0; i<dice2.length; i++){
-            dice2[i].classList.toggle('clickedDie'); 
-            dice2[i].classList.toggle('pinnedDie'); 
-            dice2[i].setAttribute('pinned', 'true'); 
-            dice2[i].classList.toggle('highlightDie'); 
-            dice2[i].removeEventListener('click', diceFun); 
-            userScore += chckVal(parseInt(dice2[i].textContent));
-            var scoreEle = document.querySelector('#userScore');
-            scoreEle.textContent = 'Your score: '+userScore; 
-        }
-        var dice3 = document.querySelectorAll('[pinned = false]'); 
-        for(var b=0; b<dice3.length; b++){
-            dice3[b].textContent = ' ';
-            dice3[b].classList.toggle('highlightDie');
-            dice3[b].removeEventListener('click',diceFun); 
-        }
-        if(dice3.length === 0){
-           if(userScore > computerScore){
-                console.log('You lose!');
-                var loseEle = document.createElement('div'); 
-                loseEle.textContent = 'You lose!'; 
-                loseEle.classList.toggle('lose'); 
-                gameEle.insertBefore(loseEle,dices);
-           }
-           else{
-               console.log('You win!');
-               var winEle = document.createElement('div'); 
-               winEle.textContent = 'You win!'; 
-               winEle.classList.toggle('win');
-               gameEle.insertBefore(winEle,dices); 
-           }
+        if(dice2.length > 0){
+            for(var i=0; i<dice2.length; i++){
+                dice2[i].classList.toggle('clickedDie'); 
+                dice2[i].classList.toggle('pinnedDie'); 
+                dice2[i].setAttribute('pinned', 'true'); 
+                dice2[i].classList.toggle('highlightDie'); 
+                dice2[i].removeEventListener('click', diceFun); 
+                userScore += chckVal(parseInt(dice2[i].textContent));
+                var scoreEle = document.querySelector('#userScore');
+                scoreEle.textContent = 'Your score: '+userScore; 
+            }
+            var dice3 = document.querySelectorAll('[pinned = false]'); 
+            for(var b=0; b<dice3.length; b++){
+                dice3[b].textContent = ' ';
+                dice3[b].classList.toggle('highlightDie');
+                dice3[b].removeEventListener('click',diceFun); 
+                dice3[b].addEventListener('click',blankDieFunc); 
+            }
+            if(dice3.length === 0){
+               if(userScore > computerScore){
+                    var loseEle = document.createElement('div'); 
+                    loseEle.textContent = 'You lose!'; 
+                    loseEle.classList.toggle('lose'); 
+                    gameEle.insertBefore(loseEle,dices);
+               }
+               else{
+                   var winEle = document.createElement('div'); 
+                   winEle.textContent = 'You win!'; 
+                   winEle.classList.toggle('win');
+                   gameEle.insertBefore(winEle,dices); 
+               }
+            }
+            else{
+                rollButton.disabled = false; 
+                rollButton.classList.toggle('rollButton'); 
+            }
+            pinButton.disabled = true;             
         }
         else{
-            rollButton.disabled = false; 
-            rollButton.classList.toggle('rollButton'); 
+            var errorEle = errMessEle.firstElementChild.firstElementChild; 
+            errorEle.textContent = 'You can\'t click on pin before selecting atleast one die.'; 
+            errMessEle.classList.toggle('hide');
+            gotItBtn.addEventListener('click', gotItBtnFunc);
         }
-        pinButton.disabled = true; 
 
     }); 
     rollButton.addEventListener('click', function(){
         rollButton.classList.toggle('rollButton'); 
         rollButton.disabled = true;
+        pinButton.disabled = false; 
         var dice = document.querySelectorAll('[pinned = false]'); 
-        
-        for(var i=0; i<dice.length; i++){
-            dice[i].classList.add('highlightDie');  
-            var dieNum = document.createTextNode(Math.floor((Math.random()*5)+1));
-            dice[i].appendChild(dieNum);
 
-            dice[i].addEventListener('click', diceFun); 
+        if(isUserPicked){
+            for(var i=0; i<userPickedNums.length; i++){
+                dice[i].classList.add('highlightDie');  
+                var dieNum = userPickedNums[i]; 
+                dice[i].textContent = dieNum; 
+
+                dice[i].addEventListener('click', diceFun); 
+            } 
+            isUserPicked = false;            
         }
+        else{
+            for(var i=0; i<dice.length; i++){
+                dice[i].removeEventListener('click',blankDieFunc);
+                dice[i].classList.add('highlightDie');  
+                var dieNum = document.createTextNode(Math.floor((Math.random()*5)+1));
+                dice[i].appendChild(dieNum);
+
+                dice[i].addEventListener('click', diceFun); 
+            }            
+        }
+
     });
 
 
